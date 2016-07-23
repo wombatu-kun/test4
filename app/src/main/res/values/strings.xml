@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Test4</string>
+    <string name="main_info">Введите количество точек:</string>
+    <string name="btn_go_label">Поехали!</string>
+
+    <string name="no_count_msg">Прежде чем ехать, нужно ввести количество точек!</string>
+    <string name="back_press_msg">Да вы же поехавшие! Дождитесь остановки, на ходу выскакивать нельзя.</string>
+    <string name="no_internets_msg">Нет доступа к интернетам! Проверьте подключение.</string>
+    <string name="wrong_params_msg">Некорректное значение! Диапазон допустимых значений: [1; 200]</string>
+    <string name="unsup_encod_msg">Ошибка на сервере. Что-то непонятное..</string>
+</resources>
