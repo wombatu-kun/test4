@@ -39,15 +39,17 @@ public class GraphicUtils {
         GraphView graph = new GraphView(activity);
         DataPoint dpArray[] = getGraphDataPoints(pointsArray);
         graph.getGridLabelRenderer().setHorizontalLabelsAngle(45);
-        graph.getGridLabelRenderer().setTextSize(12);
+        graph.getGridLabelRenderer().setTextSize(14);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(dpArray[0].getX());
         graph.getViewport().setMaxX(dpArray[dpArray.length-1].getX());
         graph.getViewport().setScalable(true);
         graph.getViewport().setScrollable(true);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dpArray);
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(3);
+        if (dpArray.length == 1) {
+            series.setDrawDataPoints(true);
+            series.setDataPointsRadius(3);
+        }
         series.setThickness(2);
         graph.addSeries(series);
         return graph;
