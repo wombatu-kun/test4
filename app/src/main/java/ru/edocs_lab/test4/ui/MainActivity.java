@@ -1,4 +1,4 @@
-package ru.edocs_lab.test4;
+package ru.edocs_lab.test4.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,23 +18,27 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import ru.edocs_lab.test4.request.RequestManager;
+
 public class MainActivity extends Activity {
 
+    private RequestManager requestManager;
     private InputMethodManager imm;
     private EditText etCount;
     private Button btnGo;
     private View progressContainer;
-    private boolean inProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        requestManager = RequestManager.getInstance();
+        requestManager.init(this.getApplicationContext());
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        inProgress = false;
         progressContainer = findViewById(R.id.progressContainer);
         progressContainer.setVisibility(View.INVISIBLE);
         etCount = (EditText)findViewById(R.id.etCount);
+        etCount.setText(requestManager.getLastCount());
         if (etCount.requestFocus()) {
             etCount.postDelayed(new Runnable(){
                 @Override
@@ -52,12 +56,12 @@ public class MainActivity extends Activity {
                     Toast.makeText(MainActivity.this, R.string.no_count_msg, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (NetworkUtils.checkConnection(MainActivity.this)) {
+                if (requestManager.checkConnection()) {
                     try {
                         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     } catch (NullPointerException e) {/* ну и ладно, не очень-то и хотелось.. */}
                     progressContainer.setVisibility(View.VISIBLE);
-                    inProgress = true;
+                    requestManager.setInProcess(true);
                     new LoadPointsTask().execute(etCount.getText().toString());
                 } else {
                     Toast.makeText(MainActivity.this, R.string.no_internets_msg, Toast.LENGTH_SHORT).show();
@@ -66,21 +70,32 @@ public class MainActivity extends Activity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        if (requestManager.isInProcess()) {
+            Toast.makeText(this, R.string.back_press_msg, Toast.LENGTH_SHORT).show();
+        } else {
+            finish();
+        }
+    }
+
     private class LoadPointsTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            return NetworkUtils.getResponseString(params[0], MainActivity.this.getApplicationContext());
+            return requestManager.doRequest(params[0]);
         }
+
         @Override
         protected void onPostExecute(String result) {
             progressContainer.setVisibility(View.INVISIBLE);
-            inProgress = false;
+            requestManager.setInProcess(false);
             if (!result.isEmpty()) {
                 parseResult(result);
             } else {
                 Toast.makeText(MainActivity.this, R.string.unsup_encod_msg, Toast.LENGTH_SHORT).show();
             }
         }
+
         private void parseResult(String result) {
             JSONObject respJsonObj;
             try {
@@ -111,15 +126,5 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this, R.string.unsup_encod_msg, Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (inProgress) {
-            Toast.makeText(this, R.string.back_press_msg, Toast.LENGTH_SHORT).show();
-        } else {
-            finish();
-        }
-
     }
 }

@@ -1,4 +1,4 @@
-package ru.edocs_lab.test4;
+package ru.edocs_lab.test4.response;
 
 import android.app.Activity;
 import android.graphics.PointF;
@@ -46,6 +46,8 @@ public class GraphicUtils {
         graph.getViewport().setScalable(true);
         graph.getViewport().setScrollable(true);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dpArray);
+        series.setDrawDataPoints(true);
+        series.setDataPointsRadius(3);
         series.setThickness(2);
         graph.addSeries(series);
         return graph;

@@ -7,8 +7,7 @@
     android:showDividers="middle">
     <TextView
         android:id="@+id/item_n"
-        android:layout_width="0dp"
-        android:layout_weight="0.1"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:gravity="left"
         />
@@ -16,13 +15,13 @@
         android:id="@+id/item_x"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.45"
+        android:layout_weight="1"
         android:gravity="center"
         />
     <TextView
         android:id="@+id/item_y"
         android:layout_width="0dp"
-        android:layout_weight="0.45"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:gravity="center"/>
 </LinearLayout>

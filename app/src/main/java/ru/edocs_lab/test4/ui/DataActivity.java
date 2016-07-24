@@ -1,4 +1,4 @@
-package ru.edocs_lab.test4;
+package ru.edocs_lab.test4.ui;
 
 import android.app.Activity;
 import android.graphics.PointF;
@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static ru.edocs_lab.test4.response.GraphicUtils.getGraphicView;
+import static ru.edocs_lab.test4.response.GraphicUtils.getPointsFromJson;
+
 public class DataActivity extends Activity {
     public static final String EXTRA_JSON_STRING = "JSON_STRING";
 
@@ -20,12 +23,12 @@ public class DataActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
         String jsonString = getIntent().getStringExtra(EXTRA_JSON_STRING);
-        ArrayList<PointF> pointsArray = GraphicUtils.getPointsFromJson(jsonString);
+        ArrayList<PointF> pointsArray = getPointsFromJson(jsonString);
         PointsAdapter pointsAdapter = new PointsAdapter(pointsArray);
         ListView pointsList = (ListView)findViewById(R.id.pointsList);
         pointsList.setAdapter(pointsAdapter);
         LinearLayout graphLayout = (LinearLayout)findViewById(R.id.graphLayout);
-        graphLayout.addView(GraphicUtils.getGraphicView(this, pointsArray));
+        graphLayout.addView(getGraphicView(this, pointsArray));
     }
 
     private class PointsAdapter extends ArrayAdapter<PointF> {
